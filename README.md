@@ -2,7 +2,7 @@
 
 
 ## install
-- mac / win
+- mac / win / linux
 - https://github.com/leaningtech/cheerp-meta/releases
 
 ## run
@@ -23,7 +23,7 @@ C:\cheerp\bin\clang++.exe hello.cpp -o hello.js
 ```
 
 ## 解读
-- 变异后的js中 new URL('hello.wasm', import.meta.url),似乎cheerp是使用js和wasm建立桥接
+- 在编译后的js中 new URL('hello.wasm', import.meta.url),似乎cheerp是使用js和wasm建立桥接
 - 我直接调用wasm无法在export中拿到导出的函数,所以并不是像emsdk那样使用
 
 
