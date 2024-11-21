@@ -1,53 +1,66 @@
 <template>
   <div>
     <div>Cheerp JS</div>
-    <input v-model="first"/>
-    <input v-model="second"/>
+    <input v-model="first" />
+    <input v-model="second" />
     <button @click="computation">Cheerp js computation</button>
     <span>RESULT: {{ result }}</span>
   </div>
 
   <div>
     <div>Cheerp wasm</div>
-    <input v-model="third"/>
-    <input v-model="fourth"/>
+    <input v-model="third" />
+    <input v-model="fourth" />
     <button @click="computationWasm">Cheerp wasm computation</button>
     <span>RESULT: {{ wasmRes }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import hello from './Cheerp/hello.js'
+import { onMounted, ref } from "vue"
+// @ts-ignore
+import hello from "../Cheerp/hello.js"
 
-
-const first = ref(0)
-const second = ref(0)
-const result = ref('')
+const first = ref<number>(0)
+const second = ref<number>(0)
+const result = ref<string>("")
 
 async function computation() {
   const data = await hello()
-  result.value = data.add(first.value, second.value)
+  result.value = String(data.add(first.value, second.value))
 }
 
+/**
+ *
+ * wasm
+ *
+ */
+
+interface WasmModule {
+  i: (third: number, fourth: number) => number
+}
+
+const module = ref<WasmModule | null>(null)
+
+onMounted(() => {
+  loadWasm()
+})
 
 async function loadWasm() {
-  const response = await fetch('cheerpWasm.wasm');
-  const buffer = await response.arrayBuffer();
-  const {instance} = await WebAssembly.instantiate(buffer);
-  return instance.exports;
+  const response = await fetch("cheerpWasm.wasm")
+  const buffer = await response.arrayBuffer()
+  const { instance } = await WebAssembly.instantiate(buffer)
+  // @ts-ignore
+  module.value = instance.exports as WasmModule
 }
 
-
-const third = ref(0)
-const fourth = ref(0)
-const wasmRes = ref('')
+const third = ref<number>(0)
+const fourth = ref<number>(0)
+const wasmRes = ref<string>("")
 
 async function computationWasm() {
-  const wasm = await loadWasm()
-  // 方法1: 直接调用导出的函数
-  if (typeof wasm.i === 'function') {
-    wasmRes.value = wasm.i(third.value, fourth.value)
+  if (module.value && typeof module.value.i === "function") {
+    wasmRes.value = String(module.value.i(third.value, fourth.value))
   }
 }
 </script>
