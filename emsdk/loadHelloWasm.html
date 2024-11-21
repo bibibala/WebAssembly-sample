@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Direct WebAssembly Example</title>
+</head>
+<body>
+输出结果:<div id="content"></div>
+<script>
+    // 加载 .wasm 文件
+    async function loadWasm(file) {
+        // 获取二进制数据
+        const response = await fetch(file);
+        const buffer = await response.arrayBuffer();
+
+        // 编译 WebAssembly 模块
+        const wasmModule = await WebAssembly.instantiate(buffer);
+
+        // 返回导出的函数对象
+        return wasmModule.instance.exports;
+    }
+
+    // 调用 WebAssembly 函数
+    const content = document.getElementById('content');
+    (async () => {
+        const wasm = await loadWasm('./hello.wasm'); // 确保路径正确
+        const result = wasm.add(5, 7); // 调用导出的 `_add` 函数
+        content.innerHTML = result
+        console.log('Result:', result); // 输出 12
+    })();
+</script>
+</body>
+</html>

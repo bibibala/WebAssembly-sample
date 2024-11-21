@@ -7,8 +7,9 @@
 <body>
 <script type="module">
     import init from "./hello.js";
-
-    await init();
+    const res = await init()
+    const a = res.add(1, 2)
+    console.log(a);
 </script>
 </body>
 </html>

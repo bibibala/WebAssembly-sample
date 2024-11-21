@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+输出结果:
+<div id="content"></div>
+<script>
+    async function loadWasm(file) {
+        const response = await fetch(file);
+        const buffer = await response.arrayBuffer();
+        const {instance} = await WebAssembly.instantiate(buffer);
+        return instance.exports;
+    }
+
+    (async () => {
+        const wasm = await loadWasm('hello.wasm');
+
+        // 方法1: 直接调用导出的函数
+        if (typeof wasm.i === 'function') {
+            const content = document.getElementById("content")
+            content.innerHTML = wasm.i(10000, 2);
+        }
+
+        // 方法2: 处理内存
+        if (wasm.N instanceof WebAssembly.Memory) {
+            const memoryBuffer = wasm.N.buffer;
+            const uint8Array = new Uint8Array(memoryBuffer);
+
+            // 打印内存内容
+            console.log('Memory buffer:', memoryBuffer);
+            console.log('Memory as Uint8Array:', uint8Array);
+
+            // 如果需要读取特定位置的数据
+            // 例如，读取前10个字节
+            console.log('First 10 bytes:', uint8Array.slice(0, 10));
+        }
+    })();
+</script>
+</body>
+</html>
