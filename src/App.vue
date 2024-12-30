@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div>Cheerp JS</div>
+    <div>Example of calling cheerp js</div>
     <input v-model="first" />
     <input v-model="second" />
-    <button @click="computation">Cheerp js computation</button>
+    <button @click="computation">computation</button>
     <span>RESULT: {{ result }}</span>
   </div>
 
   <div>
-    <div>Cheerp wasm</div>
+    <div>Example of calling cheerp wasm</div>
     <input v-model="third" />
     <input v-model="fourth" />
-    <button @click="computationWasm">Cheerp wasm computation</button>
+    <button @click="computationWasm">computation</button>
     <span>RESULT: {{ wasmRes }}</span>
   </div>
 </template>

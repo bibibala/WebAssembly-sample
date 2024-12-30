@@ -1,7 +1,7 @@
 {
-  "name": "vite-project",
+  "name": "webassembly-sample",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,7 +16,7 @@
     "@vitejs/plugin-vue": "^5.2.0",
     "prettier": "^3.3.3",
     "typescript": "~5.6.3",
-    "vite": "^5.4.11",
+    "vite": "^6.0.6",
     "vue-tsc": "^2.1.10"
   }
 }

@@ -1,16 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-<script type="module">
-    import init from "./hello.js";
-    const res = await init()
-    const a = res.add(1, 2)
-    console.log(a);
-</script>
-</body>
+  </head>
+  <body>
+    <script type="module">
+      import init from "./hello.js"
+      const res = await init()
+      const a = res.add(1, 2)
+      console.log(a)
+    </script>
+  </body>
 </html>
-

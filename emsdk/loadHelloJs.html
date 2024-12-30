@@ -1,19 +1,19 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Emscripten Demo</title>
-</head>
-<body>
-<script src="hello.js"></script>
-输出结果:
-<div id="content"></div>
+  </head>
+  <body>
+    <script src="hello.js"></script>
+    输出结果:
+    <div id="content"></div>
 
-<script>
-    Module.onRuntimeInitialized = function () {
+    <script>
+      Module.onRuntimeInitialized = function () {
         const content = document.getElementById("content")
         content.innerHTML = Module._add(1, 2)
-    };
-</script>
-</body>
+      }
+    </script>
+  </body>
 </html>
