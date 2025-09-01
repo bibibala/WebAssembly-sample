@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 // @ts-ignore
-import hello from "../Cheerp/hello.js"
+import hello from "../example/Cheerp/hello.js"
 
 const first = ref<number>(0)
 const second = ref<number>(0)

@@ -1,3 +1,7 @@
+**语言**: [中文](#) | [English](README.en.md)
+
+---
+
 # emsdk 简单的使用笔记
 
 ## clone

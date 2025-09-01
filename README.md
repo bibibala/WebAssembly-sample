@@ -1,100 +1,104 @@
-Cheerp 和 Emscripten（EMSDK 是 Emscripten 开发工具包）都是将 C/C++ 代码编译为 WebAssembly（WASM）的工具链，但它们的功能、设计哲学和适用场景有一些显著的区别。以下是它们的主要区别：
+**Language**: [English](#) | [中文](README.zh.md)
 
 ---
 
-### **1. 基本定位**
-
-| 特性         | Cheerp                                             | Emscripten (EMSDK)                          |
-| ------------ | -------------------------------------------------- | ------------------------------------------- |
-| **目标**     | 专注于将 C++ 编译为适合 Web 使用的高性能代码       | 更通用，支持生成 WebAssembly 和 asm.js 代码 |
-| **生成目标** | 可生成纯 `.wasm` 文件，也支持带有桥接 `.js` 的输出 | 通常生成 `.js`（作为桥）和 `.wasm` 文件     |
-| **设计哲学** | 轻量化、易集成                                     | 功能丰富，但文件较大，生成复杂              |
+Both Cheerp and Emscripten (EMSDK is the Emscripten Development Kit) are toolchains for compiling C/C++ code to WebAssembly (WASM), but they have some significant differences in functionality, design philosophy, and use cases. Here are their main differences:
 
 ---
 
-### **2. 输出文件差异**
+### **1. Basic Positioning**
 
-| 特性                       | Cheerp                                | Emscripten                              |
-| -------------------------- | ------------------------------------- | --------------------------------------- |
-| **生成的 JavaScript 文件** | 轻量化，基本上只提供 WebAssembly 桥接 | 较重，包含大量 runtime 和 Polyfill      |
-| **文件依赖性**             | 更倾向直接使用 WebAssembly            | 提供完整的 JS runtime，与 WASM 配合使用 |
-| **运行时开销**             | 更小（代码更简洁）                    | 更大（功能更全面，支持更复杂的场景）    |
-
----
-
-### **3. 支持的功能**
-
-| 功能                  | Cheerp                           | Emscripten                                 |
-| --------------------- | -------------------------------- | ------------------------------------------ |
-| **WebAssembly 导出**  | 支持，较轻量，但需要显式定义导出 | 完全支持，可通过 `EXPORTED_FUNCTIONS` 配置 |
-| **多线程支持**        | 部分支持                         | 强大支持，内置对 WebWorker 的封装          |
-| **文件系统模拟 (FS)** | 无内置文件系统模拟               | 提供 `MEMFS` 和 `NODEFS` 等文件系统模拟    |
-| **标准库支持**        | 支持常用 C++ 标准库              | 支持完整的 C/C++ 标准库（较大开销）        |
-| **异步 API 支持**     | 部分支持，需手动实现             | 强大支持，提供 Asyncify 等工具             |
+| Feature      | Cheerp                                           | Emscripten (EMSDK)                          |
+| ------------ | ------------------------------------------------ | ------------------------------------------- |
+| **Target**   | Focuses on compiling C++ to high-performance code suitable for Web use | More general-purpose, supports generating WebAssembly and asm.js code |
+| **Output Target** | Can generate pure `.wasm` files, also supports output with bridging `.js` | Usually generates `.js` (as bridge) and `.wasm` files |
+| **Design Philosophy** | Lightweight, easy integration                     | Feature-rich, but larger files, complex generation |
 
 ---
 
-### **4. 适用场景**
+### **2. Output File Differences**
 
-| 场景                  | Cheerp                                         | Emscripten                                    |
+| Feature                    | Cheerp                               | Emscripten                              |
+| -------------------------- | ------------------------------------ | --------------------------------------- |
+| **Generated JavaScript File** | Lightweight, basically only provides WebAssembly bridging | Heavier, contains extensive runtime and Polyfill |
+| **File Dependencies**       | More inclined to use WebAssembly directly | Provides complete JS runtime, works with WASM |
+| **Runtime Overhead**        | Smaller (more concise code)          | Larger (more comprehensive functionality, supports more complex scenarios) |
+
+---
+
+### **3. Supported Features**
+
+| Feature               | Cheerp                           | Emscripten                                |
+| --------------------- | -------------------------------- | ----------------------------------------- |
+| **WebAssembly Export** | Supported, lighter weight, but requires explicit export definition | Full support, can be configured via `EXPORTED_FUNCTIONS` |
+| **Multi-threading Support** | Partial support                  | Strong support, built-in WebWorker encapsulation |
+| **File System Simulation (FS)** | No built-in file system simulation | Provides `MEMFS` and `NODEFS` file system simulation |
+| **Standard Library Support** | Supports common C++ standard libraries | Supports complete C/C++ standard library (larger overhead) |
+| **Async API Support** | Partial support, requires manual implementation | Strong support, provides Asyncify and other tools |
+
+---
+
+### **4. Use Cases**
+
+| Scenario              | Cheerp                                         | Emscripten                                    |
 | --------------------- | ---------------------------------------------- | --------------------------------------------- |
-| **轻量化应用**        | 非常适合，生成代码更小，尤其适合小型 WASM 应用 | 较不适合，runtime 开销较大                    |
-| **复杂游戏/引擎移植** | 不太适合，缺少对复杂场景的直接支持             | 非常适合，广泛用于 Unity、Unreal 等引擎的移植 |
-| **多线程/复杂 I/O**   | 不太适合，需手动实现多线程支持和文件系统       | 非常适合，内置支持多线程和模拟文件系统        |
-| **跨平台支持**        | 针对 Web 优化，更适合直接在浏览器中运行        | 更通用，支持 Node.js 和多种平台               |
+| **Lightweight Apps**  | Very suitable, generates smaller code, especially suitable for small WASM applications | Less suitable, larger runtime overhead        |
+| **Complex Games/Engine Porting** | Not very suitable, lacks direct support for complex scenarios | Very suitable, widely used for Unity, Unreal engine porting |
+| **Multi-threading/Complex I/O** | Not very suitable, requires manual implementation of multi-threading and file systems | Very suitable, built-in support for multi-threading and simulated file systems |
+| **Cross-platform Support** | Optimized for Web, more suitable for direct browser execution | More general-purpose, supports Node.js and multiple platforms |
 
 ---
 
-### **5. 性能和优化**
+### **5. Performance and Optimization**
 
-| 特性            | Cheerp                               | Emscripten                               |
-| --------------- | ------------------------------------ | ---------------------------------------- |
-| **性能优化**    | 更注重生成小文件和直接调用 WASM 函数 | 注重兼容性，但生成代码更复杂，运行时较大 |
-| **支持 asm.js** | 不支持                               | 支持，可用于不支持 WASM 的浏览器         |
+| Feature            | Cheerp                               | Emscripten                               |
+| ------------------ | ------------------------------------ | ---------------------------------------- |
+| **Performance Optimization** | More focused on generating small files and direct WASM function calls | Focuses on compatibility, but generates more complex code, larger runtime |
+| **asm.js Support** | Not supported                        | Supported, can be used for browsers that don't support WASM |
 
 ---
 
-### **6. 使用方式**
+### **6. Usage**
 
-- **Cheerp**：更简单，通常通过 `clang` 编译：
+- **Cheerp**: Simpler, usually compiled through `clang`:
 
   ```bash
   clang++ -target cheerp -o output.js your_code.cpp
   ```
 
-  或直接生成 `.wasm` 文件：
+  Or directly generate `.wasm` files:
 
   ```bash
   clang++ -target cheerp -cheerp-mode=wasm -o output.wasm your_code.cpp
   ```
 
-- **Emscripten**：配置稍复杂，使用 `emcc` 编译：
+- **Emscripten**: Slightly more complex configuration, compiled using `emcc`:
   ```bash
   emcc your_code.cpp -o output.js -s EXPORTED_FUNCTIONS=['_main']
   ```
 
 ---
 
-### **7. 文件体积对比**
+### **7. File Size Comparison**
 
-| 工具           | 简单 C++ 程序生成的文件大小      | 完整 WebAssembly 项目 |
-| -------------- | -------------------------------- | --------------------- |
-| **Cheerp**     | 更小，通常只有几 KB              | 文件较小，运行时轻量  |
-| **Emscripten** | 较大，通常包含 100KB+ 的 runtime | 文件较大，功能更全面  |
+| Tool           | Simple C++ Program Generated File Size | Complete WebAssembly Project |
+| -------------- | -------------------------------------- | ----------------------------- |
+| **Cheerp**     | Smaller, usually only a few KB         | Smaller files, lightweight runtime |
+| **Emscripten** | Larger, usually includes 100KB+ runtime | Larger files, more comprehensive functionality |
 
 ---
 
-### **8. 总结**
+### **8. Summary**
 
-- **选择 Cheerp 的场景：**
+- **Choose Cheerp for scenarios:**
 
-  - 希望生成小体积的 WebAssembly 文件。
-  - 不需要复杂的功能，例如文件系统模拟、多线程支持。
-  - 适合轻量化 Web 应用或工具。
+  - Want to generate small WebAssembly files.
+  - Don't need complex functionality, such as file system simulation, multi-threading support.
+  - Suitable for lightweight Web applications or tools.
 
-- **选择 Emscripten 的场景：**
-  - 需要完整的 C++ 标准库支持。
-  - 希望移植复杂应用，如游戏引擎或多线程程序。
-  - 对文件体积要求不严格，但需要功能全面。
+- **Choose Emscripten for scenarios:**
+  - Need complete C++ standard library support.
+  - Want to port complex applications, such as game engines or multi-threaded programs.
+  - Not strict about file size requirements, but need comprehensive functionality.
 
-如果你的目标是浏览器端的轻量化 WASM 应用程序，**Cheerp 更适合**；如果你需要移植大型项目并希望获得更高的功能兼容性，**Emscripten 更强大**。
+If your goal is lightweight WASM applications for browsers, **Cheerp is more suitable**; if you need to port large projects and want higher functional compatibility, **Emscripten is more powerful**.

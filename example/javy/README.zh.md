@@ -1,3 +1,7 @@
+**语言**: [中文](#) | [English](README.en.md)
+
+---
+
 # Javy 简介
 
 [Javy](https://github.com/bytecodealliance/javy) 是由 Bytecode Alliance 推出的工具链，可以将 JavaScript 代码编译为 WebAssembly (Wasm) 模块。它适用于需要在 Wasm 环境中运行 JS 代码的场景，支持 ECMAScript 2020 标准，基于 WASI 规范。

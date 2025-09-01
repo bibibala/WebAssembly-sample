@@ -1,3 +1,7 @@
+**语言**: [中文](#) | [English](NOTE.en.md)
+
+---
+
 在使用 **Emscripten SDK (emsdk)** 将 C/C++ 编译为 WebAssembly 时，Emscripten 提供了许多工具和宏来控制函数、变量的导出和行为。以下是类似 `EMSCRIPTEN_KEEPALIVE` 的常用方法和宏的列表：
 
 ---
